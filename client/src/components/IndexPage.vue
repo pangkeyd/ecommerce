@@ -20,10 +20,13 @@
                 </div>
                 <i class="dropdown icon"></i>
                 <div class="menu" v-if="itemsInCart.length > 0">
-                  <div class="item">
+                  <div class="ui message">
                     <div class="row" v-for="itemCart in itemsInCart">
                       <div class="ui two column grid">
                         <div class="column">
+                          <button class="ui mini red button" @click="removeCart(itemCart._id)">
+                            <i class="icon remove"></i>
+                          </button>
                           <img :src="'../static/image_item/' + itemCart.image" alt="" width="70">
                         </div>
                         <div class="column">
@@ -34,18 +37,23 @@
                     </div>
                     <div class="row">
                       <div class="ui two column grid total_sale">
-                        <div class="column">
-                          <span>Total:</span>
+                        <div class="row">
+                          <div class="column">
+                            <span>Total:</span>
+                          </div>
+                          <div class="column">
+                            <span>Rp {{ totalPrice }}</span>
+                          </div>
                         </div>
-                        <div class="column">
-                          <span>{{ totalPrice }}</span>
+                        <div class="row">
+                          <button class="ui violet button but_check">Checkout</button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="menu" v-else>
-                  <div class="item">
+                  <div class="ui message">
                     Gak ada Item, beli dulu!
                   </div>
                 </div>
@@ -92,10 +100,30 @@
                       <img :src="'../static/image_item/' + item.image" alt="">
                       <p>{{ item.name }}</p>
                       <p>Rp {{ item.price }}</p>
-                      <button @click="getItemToCart(item._id)" class="ui fluid green button">
+                      <button @click="getItemToCart(item._id)" class="ui fluid green button buy_item">
                         Buy
                         <i class="add to cart icon"></i>
                       </button>
+
+                      <div class="ui basic modal collect_card">
+                        <div class="ui icon header">
+                          <i class="archive icon"></i>
+                          Archive Old Messages
+                        </div>
+                        <div class="content">
+                          <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+                        </div>
+                        <div class="actions">
+                          <div class="ui red basic cancel inverted button">
+                            <i class="remove icon"></i>
+                            No
+                          </div>
+                          <div class="ui green ok inverted button">
+                            <i class="checkmark icon"></i>
+                            Yes
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -218,7 +246,8 @@ export default {
   methods: {
     ...mapActions([
       'getAllItem',
-      'getItemToCart'
+      'getItemToCart',
+      'removeCart'
     ])
   },
   mounted () {
@@ -230,8 +259,6 @@ export default {
     })
 
     $('.ui.dropdown').dropdown();
-
-    // console.log(this.$refs.testValue.value)
 
     this.getAllItem()
   }

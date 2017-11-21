@@ -47,6 +47,27 @@ const store = new Vuex.Store({
       })
 
       state.itemC.push(payload)
+    },
+    deleteCartItem: function(state, payload) {
+      const idx = state.itemsInCart.findIndex(function(cart){
+        return cart._id === payload
+      })
+
+      let arr = []
+      state.itemsInCart.forEach(r => {
+        if(payload == r._id){
+          state.totalPrice -= r.price
+        }
+      })
+
+      state.itemC.forEach(s => {
+        if(payload == s._id){
+          arr.push(s._id)
+        }
+      })
+      
+      state.itemC.splice(idx, arr.length)
+      state.itemsInCart.splice(idx, 1)
     }
   },
   actions: {
@@ -61,11 +82,14 @@ const store = new Vuex.Store({
       .then(({data}) => {
         if(data.length > 0){
           data.forEach(r => {
-            localStorage.setItem('zxcvbn', r._id)
             commit('setItemInCart', r)
+            alert('Masuk ke Cart!')
           })
         }
       })
+    },
+    removeCart: function(context, payload) {
+      context.commit('deleteCartItem', payload)
     }
   }
 })

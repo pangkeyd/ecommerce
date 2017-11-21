@@ -35,7 +35,7 @@ i.in.cart.icon {
 
 /* ITEM CART */
 
-.cart_item .item span {
+.cart_item .message span {
   font-weight: bold
 }
 
@@ -53,6 +53,19 @@ i.in.cart.icon {
 
 .sale_content.sale img {
     width: 100%;
+}
+
+.button.ui.violet.button.but_check {
+  margin: auto
+}
+
+i.icon.remove {
+    margin: -7px !important;
+}
+
+.ui.two.column.grid button.ui.mini.button {
+    position: relative;
+    top: -30px;
 }
 
 /* FOOTER */
