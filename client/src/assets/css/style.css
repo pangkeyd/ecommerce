@@ -68,6 +68,22 @@ i.icon.remove {
     top: -30px;
 }
 
+.owl-theme .item {
+    margin-top: 15px;
+}
+
+.owl-dots {
+    display: none;
+}
+
+.ui.active.inline.loader {
+  margin-top: 5px
+}
+
+.success_cart div {
+    text-align: center;
+}
+
 /* FOOTER */
 
 footer {

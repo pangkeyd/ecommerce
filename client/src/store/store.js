@@ -13,7 +13,8 @@ const store = new Vuex.Store({
     items: [],
     itemsInCart: [],
     itemC: [],
-    totalPrice: []
+    totalPrice: [],
+    checkOut: []
   },
   mutations: {
     setItem: function(state, payload) {
@@ -65,9 +66,16 @@ const store = new Vuex.Store({
           arr.push(s._id)
         }
       })
-      
+
       state.itemC.splice(idx, arr.length)
       state.itemsInCart.splice(idx, 1)
+
+      if(state.itemsInCart.length === 0){
+        state.itemC.length = 0
+      }
+    },
+    setCheckOut: function(state, payload) {
+      state.checkOut = payload
     }
   },
   actions: {
@@ -90,6 +98,27 @@ const store = new Vuex.Store({
     },
     removeCart: function(context, payload) {
       context.commit('deleteCartItem', payload)
+    },
+    checkOutCart: function(context, payload) {
+      let arr = []
+      let obj = {}
+      context.state.itemsInCart.forEach(r => {
+        arr.push(r._id)
+        let split = arr.join(',')
+        obj.item = split
+        obj.total = payload
+      })
+      http.post('/checkout', obj)
+      .then(({data}) => {
+        http.get('/checkout/' + data._id)
+        .then(({data}) => {
+          context.commit('setCheckOut', data)
+          $('.ui.modal.success_cart').modal('show')
+          setTimeout(() => {
+            $('.ui.modal.success_cart').modal('hide')
+          }, 3000)
+        })
+      })
     }
   }
 })

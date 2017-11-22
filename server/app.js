@@ -12,8 +12,10 @@ app.use(bodyParser.json())
 // Route
 
 const item = require('./routers/item')
+const ck_out = require('./routers/checkout')
 
 app.use('/item', item)
+app.use('/checkout', ck_out)
 
 app.listen(3000, () => {
   console.log('AYO JALAN!')

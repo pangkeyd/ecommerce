@@ -46,7 +46,7 @@
                           </div>
                         </div>
                         <div class="row">
-                          <button class="ui violet button but_check">Checkout</button>
+                          <button class="ui violet button but_check" @click="checkOutCart(totalPrice)">Checkout</button>
                         </div>
                       </div>
                     </div>
@@ -55,6 +55,21 @@
                 <div class="menu" v-else>
                   <div class="ui message">
                     Gak ada Item, beli dulu!
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a class="item">
+              <i class="icon user"></i>
+              <div class="ui dropdown">
+                Account
+                <i class="icon dropdown"></i>
+                <div class="menu">
+                  <div class="item">
+                    <router-link to="/admin/login" style="color: black">Login</router-link>
+                  </div>
+                  <div class="item">
+                    <router-link to="/admin/register" style="color: black">Register</router-link>
                   </div>
                 </div>
               </div>
@@ -68,20 +83,7 @@
       <marquee behavior="" direction="">Harga satu nya Rp 50.000,-</marquee>
     </div>
 
-    <div class="slider">
-      <!-- Set up your HTML -->
-      <div class="owl-carousel">
-        <div>
-          <img src="https://www.transformableclothing.com/new/wp-content/uploads/2017/01/homess1.jpg" alt="">
-        </div>
-        <div>
-          <img src="http://www.woodinfashion.com/wp-content/uploads/2016/08/collectionpagecover-1.jpg" alt="">
-        </div>
-        <div>
-          <img src="https://cdn.shopify.com/s/files/1/0874/8574/collections/Boys_And_Girls_50_Off_Sale_Banner_b62446f2-beff-4c7f-8148-eb85eddf869e.jpg?v=1498769705" alt="">
-        </div>
-      </div>
-    </div>
+    <slider></slider>
 
     <div class="sale_content new_collections">
       <div class="ui container">
@@ -206,16 +208,22 @@
           <h2>Sale Item!</h2>
         </div>
         <div class="row">
-          <div class="ui five column grid">
-            <div class="column" v-for="item in items">
-              <div class="ui segment">
-                <img :src="'../static/image_item/' + item.image" alt="">
-                <p>{{ item.name }}</p>
-                <p>Rp {{ item.price }},-</p>
-                <p class="ui fluid green button">
-                  Buy
-                  <i class="add to cart icon"></i>
-                </p>
+          <div v-if="loading" class="ui active centered inline loader">
+          </div>
+          <div v-else class="ui five column grid">
+            <div class="owl-carousel owl-theme">
+              <div class="item" v-for="item in items">
+                <div class="column">
+                  <div class="ui segment">
+                    <img :src="'../static/image_item/' + item.image" alt="">
+                    <p>{{ item.name }}</p>
+                    <p>Rp {{ item.price }},-</p>
+                    <p class="ui fluid green button">
+                      Buy
+                      <i class="add to cart icon"></i>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -228,35 +236,79 @@
         <p>Kopiitemtehmanis &copy; 2017</p>
       </div>
     </footer>
+
+    <div class="ui modal success_cart">
+      <i class="close icon"></i>
+      <div class="header">
+        Checkout
+      </div>
+      <div class="content" v-for="ck in checkOut">
+        <div class="description">
+          <p v-for="ckID in ck.itemID">
+            <span>Item: {{ ckID.name }}</span>
+            <span>
+              <img :src="'../static/image_item/' + ckID.image" width="100" alt="">
+            </span>
+          </p>
+          <p>Total Price: {{ ck.total_price }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import PromoSlider from './SliderPromo.vue'
 
 export default {
+  data () {
+    return {
+      loading: true
+    }
+  },
+  components: {
+    'slider': PromoSlider
+  },
   computed: {
     ...mapState([
       'items',
       'itemsInCart',
       'itemC',
-      'totalPrice'
+      'totalPrice',
+      'checkOut'
     ])
   },
   methods: {
     ...mapActions([
       'getAllItem',
       'getItemToCart',
-      'removeCart'
+      'removeCart',
+      'checkOutCart'
     ])
   },
   mounted () {
-    $('.owl-carousel').owlCarousel({
-        loop:true,
-        margin:10,
-        autoplay: true,
-        responsiveClass:true
-    })
+    setTimeout(() => {
+      this.loading = false
+      this.$nextTick(() => {
+        $(this.$el).find('.owl-carousel.owl-theme').owlCarousel({
+          loop:true,
+          margin:10,
+          autoplay: true,
+          responsive:{
+            0:{
+              items:1
+            },
+            600:{
+              items:3
+            },
+            1000:{
+              items:5
+            }
+          }
+        })
+      })
+    }, 2000)
 
     $('.ui.dropdown').dropdown();
 
