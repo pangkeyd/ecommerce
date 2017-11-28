@@ -3,9 +3,30 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>client</title>
+    <title>JualBeliDisini!</title>
+
+    <link rel="shortcut icon" href="https://storage.cloud.google.com/bucket-ecommerce/logoeccom.png?_ga=2.35550569.-999801644.1511707330">
   </head>
   <body>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '413986362349046',
+          xfbml      : true,
+          version    : 'v2.11'
+        });
+        FB.AppEvents.logPageView();
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "https://connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>

@@ -6,7 +6,7 @@ mongoose.connect(URI, { useMongoClient: true })
 
 var ck_out = new Schema({
   itemID: [
-    {type: Schema.Types.ObjectId, ref: 'Item'}
+    {type: Schema.Types.ObjectId, ref: 'Item_p2r_eccomerce'}
   ],
   total_price: Number
 })
@@ -34,7 +34,7 @@ function checkout(body, cb){
       })
       ck_outSchema.save((err, ck_out) => {
         if(err){
-          res.status(200).send(err)
+          res.status(500).send(err)
         }
         cb(ck_out)
       })
@@ -45,7 +45,7 @@ function checkout(body, cb){
       })
       ck_outSchema.save((err, ck_out) => {
         if(err){
-          res.status(200).send(err)
+          res.status(500).send(err)
         }
         cb(ck_out)
       })
@@ -60,7 +60,8 @@ function getCheckout(id, cb){
   .populate('itemID')
   .exec((err, ck) => {
     if(err){
-      res.status(200).send(err)
+      // res.status(500).send(err)
+      console.log(err)
     }
     cb(ck)
   })
